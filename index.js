@@ -40,6 +40,15 @@ app.get("/read", async function (req, res) {
     res.status(401).send({ message: err });
   }
 });
+//get by id
+app.get("/read/:id", async function (req, res) {
+  const { _id } = req.params;
+  const result = await client
+    .db("b42wd2")
+    .collection("job")
+    .findOne({ id: _id });
+  result ? res.send(result) : res.send({ message: "users not found" });
+});
 //delete by id
 app.delete("/:id", async function (req, res) {
   const { _id } = req.params;
@@ -53,7 +62,7 @@ app.delete("/:id", async function (req, res) {
     : res.send({ message: "users not found" });
 });
 // update
-app.put("/:id", async function (req, res) {
+app.put("/read/:id", async function (req, res) {
   const { _id } = req.params;
   const data = req.body;
   console.log(data);
@@ -61,6 +70,6 @@ app.put("/:id", async function (req, res) {
     .db("b42wd2")
     .collection("job")
     .updateOne({ id: _id }, { $set: data });
-  result ? res.send(result) : res.send({ message: "users not found" });
+  res.send(result);
 });
 app.listen(PORT, () => console.log(`The server started in ${PORT}`));
