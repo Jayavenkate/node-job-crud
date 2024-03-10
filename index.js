@@ -50,26 +50,31 @@ app.get("/read/:id", async function (req, res) {
   result ? res.send(result) : res.send({ message: "users not found" });
 });
 //delete by id
-app.delete("/:id", async function (req, res) {
-  const { _id } = req.params;
-  const result = await client
-    .db("b42wd2")
-    .collection("job")
-    .deleteOne({ id: _id });
-  console.log(result);
-  result.deletedCount >= 1
-    ? res.send({ message: "deleted successfully" })
-    : res.send({ message: "users not found" });
+
+app.delete("/delete/:id", async function (req, res) {
+  try {
+    const { id } = req.params;
+    const result = await client
+      .db("b42wd2")
+      .collection("job")
+      .deleteOne({ _id: new ObjectId(id) });
+    console.log(result);
+    result.deletedCount >= 1
+      ? res.send({ message: "delete successfully" })
+      : res.send({ message: "user not found" });
+  } catch (err) {
+    res.send({ message: "err" });
+  }
 });
 // update
 app.put("/read/:id", async function (req, res) {
-  const { _id } = req.params;
+  const { id } = req.params;
   const data = req.body;
   console.log(data);
   const result = await client
     .db("b42wd2")
     .collection("job")
-    .updateOne({ id: _id }, { $set: data });
+    .updateOne({ _id: new ObjectId(id) }, { $set: data });
   res.send(result);
 });
 app.listen(PORT, () => console.log(`The server started in ${PORT}`));
