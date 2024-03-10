@@ -42,11 +42,11 @@ app.get("/read", async function (req, res) {
 });
 //get by id
 app.get("/read/:id", async function (req, res) {
-  const { _id } = req.params;
+  const { id } = req.params;
   const result = await client
     .db("b42wd2")
     .collection("job")
-    .findOne({ id: _id });
+    .findOne({ _id: new ObjectId(id) });
   result ? res.send(result) : res.send({ message: "users not found" });
 });
 //delete by id
